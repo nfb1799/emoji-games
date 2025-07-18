@@ -6,8 +6,14 @@
         <h2>Emoji Match</h2>
       </div>
       <div class="stats">
-        <span>Moves: {{ moves }}</span>
-        <span>Matches: {{ matches }}/{{ totalPairs }}</span>
+        <div class="stat-box">
+          <span class="stat-label">Moves</span>
+          <span class="stat-value">{{ moves }}</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Matches</span>
+          <span class="stat-value">{{ matches }}/{{ totalPairs }}</span>
+        </div>
       </div>
       <button @click="resetGame" class="reset-btn">New Game</button>
     </div>
@@ -26,6 +32,16 @@
         </div>
       </div>
     </div>
+    <div v-if="isGameComplete" class="victory-overlay">
+      <div class="victory-modal">
+        <h2>🎉 Congratulations! 🎉</h2>
+        <p>You completed the game in {{ moves }} moves!</p>
+        <div class="victory-buttons">
+          <button @click="resetGame" class="reset-btn">Play Again</button>
+          <router-link to="/" class="back-button">Back to Games</router-link>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,6 +50,11 @@ const EMOJIS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼']
 
 export default {
   name: 'EmojiMatch',
+  computed: {
+    isGameComplete() {
+      return this.matches === this.totalPairs;
+    }
+  },
   data() {
     return {
       cards: [],
@@ -93,9 +114,8 @@ export default {
 
 <style scoped>
 .game-container {
-  max-width: 800px;
   height: 100%;
-  margin: 0 auto;
+  margin: 16px;
   padding: 0;
 }
 
@@ -155,22 +175,129 @@ export default {
   transform: rotateY(180deg);
 }
 
-.reset-btn {
-  padding: 8px 16px;
-  background: #42b983;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.stats {
+  display: flex;
+  gap: 1.5rem;
 }
 
+.stat-box {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 80px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.2rem;
+}
+
+.stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #42b983;
+}
+
+.reset-btn,
 .back-button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 16px;
-  background: #42b983;
+  background: linear-gradient(45deg, #42b983, #64d8a4);
   color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
   text-decoration: none;
-  border-radius: 4px;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: inherit;
+  width: 120px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.reset-btn:hover,
+.back-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.reset-btn:active,
+.back-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.victory-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.victory-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.victory-modal .reset-btn,
+.victory-modal .back-button {
+  margin: 0;
+}
+
+.victory-modal {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 12px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.victory-modal h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin: 0 0 1rem 0;
+}
+
+.victory-modal p {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes scaleIn {
+  from { 
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to { 
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @media (max-width: 600px) {
