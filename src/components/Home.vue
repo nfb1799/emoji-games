@@ -18,7 +18,7 @@
 import GameCard from './GameCard.vue'
 
 export default {
-  name: 'App',
+  name: 'HomeView',
   components: {
     GameCard
   },
@@ -29,14 +29,14 @@ export default {
           id: 1,
           name: 'Emoji Match',
           description: 'Match pairs of emojis in this fun memory game!',
-          thumbnail: '/game-thumbnails/emoji-match.png',
+          thumbnail: require('@/assets/game-thumbnails/emoji-match.png'),
           link: '/emoji-match'
         },
         {
           id: 2,
           name: 'Wanted!',
           description: 'Find the target emoji before time runs out!',
-          thumbnail: '/game-thumbnails/emoji-match.png',
+          thumbnail: require('@/assets/game-thumbnails/emoji-match.png'),
           link: '/wanted-game'
         },
       ]
