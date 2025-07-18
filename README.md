@@ -1,4 +1,4 @@
-# hello-world
+# emoji-games
 
 ## Project setup
 ```
